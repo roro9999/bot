@@ -9,7 +9,7 @@ export default function Tasks() {
   const [groupNameValue, setGroupNameValue] = useState("");
   const [showMssg, setShowMssg] = useState(false)
   const [groups, setGroups] = useState(() => {
-    const savedGroups = localStorage.getItem("groups");
+  const savedGroups = localStorage.getItem("groups");
     if (savedGroups) {
       return JSON.parse(savedGroups);
     } else {
@@ -29,9 +29,11 @@ export default function Tasks() {
   };
 
   const removeSelected = (a) => {
-    // setGroups(groups.filter((item) => item !== a)); 
-    setGroups([])
-    setShowMssg(true)
+    setGroups(groups.filter((item) => item !== a)); 
+    localStorage.removeItem(a.name);
+    if(groups.length == 1){
+      setShowMssg(true)
+    }
   }
 
   const addNewGroup = () => {
@@ -58,11 +60,13 @@ export default function Tasks() {
     <div className='ml-20'>
       <div className='flex'>
         <div className='w-1/2'>
-          <p className='text-2xl font-semibold pt-6 ml-8' id="title">Groups</p>
+          <p className='text-2xl font-semibold pt-6 ml-8'>Groups</p>
         </div>
         <div className='w-1/2 flex justify-end mr-10'>
-          <button onClick={toggleModal} className="text-2xl w-10 h-10 border border-[#1B1F25] rounded-full flex justify-center center mt-6"><span className='mt-[6px]'><FiPlus/></span></button>
-        </div>
+        <button className="text-[#fff] bg-[#0E61FF]  font-medium rounded-lg px-5 py-[7px] text-center inline-flex items-center mt-6" onClick={toggleModal}>
+                <span className='text-xl mr-1'><FiPlus/></span>
+              Create
+              </button>        </div>
       </div>
         <div className='flex flex-wrap overflow-auto h-full fixed cursor-pointer ml-8 mt-0'>
         <div className={
@@ -71,7 +75,38 @@ export default function Tasks() {
                       : 'flex justify-center w-[100vw]'
                   }>
                     <div>
-                      <p className='text-center -ml-48 text-lg font-medium text-[#525861] mt-[35vh]'>You have no groups</p>
+
+<div className='flex justify-center -ml-[10.80rem] mt-[29vh]'>
+  <div>
+  <div className='flex'>
+    <div className='w-2/4'>
+    <div className='w-32  h-2 bg-gray-700 rounded-lg'></div>
+    </div>
+    <div className='flex justify-end w-1/3'>
+      <div className='w-12 ml-6 h-2 bg-gray-800 rounded-lg'></div>
+    </div>
+  </div>
+  <div className='flex mt-4'>
+    <div className='w-1/4'>
+    <div className='w-24  h-2 bg-gray-500 rounded-lg'></div>
+    </div>
+    <div className='flex justify-end w-2/3'>
+      <div className='w-24 ml-8 h-2 bg-gray-700 rounded-lg'></div>
+    </div>
+  </div>
+  <div className='flex mt-4'>
+    <div className='w-1/4'>
+    <div className='w-12  h-2 bg-gray-700 rounded-lg'></div>
+    </div>
+    <div className='flex justify-end w-2/3'>
+      <div className='w-32 ml-8 h-2 bg-gray-600 rounded-lg'></div>
+    </div>
+  </div>
+  </div>
+</div>
+  
+
+                      <p className='text-center -ml-48 text-lg font-medium text-[#525861] mt-6'>You have no groups</p>
                       <p className='text-center -ml-48 mt-1.5 text-sm text-[#525861]'>Click the plus to get started with groups</p>
                     </div>
           </div>
@@ -106,16 +141,13 @@ export default function Tasks() {
           <div className="flex justify-center">
             <div className='w-96 bg-[#13181E] border border-[#1B1F25] z-30 rounded-lg mt-56' id="fade">
               <div className='flex'>
-                <div className='w-2/3'>
+                <div className='w-full'>
                   <p className='text-xl font-semibold ml-4 mt-3'>Create Group</p>
                   </div>
-                  <div className='w-1/3 flex justify-end mr-4 mt-[16px]'>
-                  <button onClick={toggleModal} className="text-3xl"><FiX/></button>
-                    </div>
                 </div>
                 <div className='ml-4 mr-4'>
                 <label className='relative top-1 text-sm text-[#525861]'>Group name</label>
-                  <input className='w-full mt-2 rounded-lg h-10 pl-3 bg-[#1B2127] border border-[#282F37]' placeholder='Target restocks'       
+                  <input className='w-full mt-2 rounded-lg h-10 pl-3 bg-[#1B2127] border border-[#282F37]' placeholder='Yeezy day'       
                     value={groupNameValue}
                     onChange={setGroupTextValue}></input>
                        <div className='flex'>

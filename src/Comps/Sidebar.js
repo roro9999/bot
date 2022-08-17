@@ -123,7 +123,7 @@ function getFour(){
                     </Tooltip>                
             </div>
         </div>
-          <div className='border-t border-[#1B1F25] flex justify-center'>
+          <div className='flex justify-center'>
               <div className='bottom-10 absolute'>
               <Tooltip title="Settings" componentsProps={{
           tooltip: {
@@ -147,12 +147,9 @@ function getFour(){
           <div className="flex justify-center" id="modal">
             <div className='w-[40vw] bg-[#13181E] border border-[#1B1F25] z-30 rounded-lg mt-48' id="fade">
               <div className='flex'>
-                <div className='w-2/3'>
+                <div className='w-full'>
                   <p className='text-xl font-semibold ml-3 mt-3'>Settings</p>
                   </div>
-                  <div className='w-1/3 flex justify-end mr-3 mt-[16px]'>
-                  <button onClick={toggleModal} className="text-3xl"><FiX/></button>
-                    </div>
                 </div>
                 <div className='ml-3 mr-3'>
                     <label className='relative top-1 text-sm text-[#525861]'>Discord webhook</label>
@@ -167,13 +164,21 @@ function getFour(){
                   <input className='w-full mt-1  rounded-lg h-10 pl-3 bg-[#1B2127] border border-[#282F37]' placeholder='1000'></input>
                             </div>
                     </div>
-                  <button className='w-full mt-4 bg-[#fff] h-9 rounded-lg bg-[#0E61FF] font-semibold'>Save</button>
-                  <div className='flex mt-3 mb-4'>
+                    <div className='flex'>
+        <div className='w-1/2'>
+        <button className='w-24 h-9 rounded-lg bg-[#0E61FF] font-semibold mb-4 mt-6'>Save</button>
+          </div>
+      <div className='w-1/2 flex justify-end'>
+        <button className='w-20 h-9 rounded-lg font-semibold mb-4 mt-6' onClick={toggleModal}>Cancel</button>
+        </div>
+
+        </div>
+                  <div className='flex mb-4'>
                     <div className='w-2/3 flex'>
                     <p className='text-[#525861]'>Exp: never</p>
                     <p className='text-[#525861] ml-5'>v0.0.0</p>
                         </div>
-                    <div className='w-1/3 flex justify-end mr-1'>
+                    <div className='w-1/3 flex justify-end mr-[10px]'>
                         <button className='text-[#0E61FF] font-semibold'>Log out</button>
                         </div>
                     </div>

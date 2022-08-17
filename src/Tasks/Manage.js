@@ -11,12 +11,14 @@ import Plus from '../Static/plus.svg'
 import Close from '../Static/close.svg'
 import Item from '../Static/item.svg'
 import toast, { Toaster } from 'react-hot-toast';
+import Edit from '../Static/edit.svg'
+import { FiPlus } from "react-icons/fi";
+
 
 
 export default function Manage() {
   let location = useLocation()
   let groupName = location.state.groupName
-  const [showMore, setShowMore] = useState(false)
   const [showMssg, setShowMssg] = useState(false)
   const [createModal, setCreateModal] = useState(false)
   const [tasks, setTasks] = useState(() => {
@@ -28,14 +30,97 @@ export default function Manage() {
     }
   });
   const [inputValue, setInputValue] = useState("");
-
-
-  const [open, setOpen] = useState(true);
-  const [icon, setIcon] = useState(Close);
+  const [taskCount, setTaskCount] = useState(100);
+  const [open, setOpen] = useState(false);
+  const [icon, setIcon] = useState(Plus);
   const [open2, setOpen2] = useState(false);
   const [icon2, setIcon2] = useState(Plus);
+  const [classic, setClassic] = useState(true);
+  const [grid, setGrid] = useState(false);
 
-  const toggleHandler = (yur) => {
+
+  useEffect(() => {
+    localStorage.setItem(groupName, JSON.stringify(tasks));
+  }, [tasks]);
+
+  const toggleModal = () => {
+    setCreateModal(!createModal)
+    checkTasks()
+  }
+
+  const toggleGrid = () => {
+    setGrid(true)
+    setClassic(false)
+  }
+
+  const toggleClassic = () => {
+    setGrid(false)
+    setClassic(true)
+  }
+
+  function handleIInputChange(e) {
+    setInputValue(e.target.value);
+  }
+
+  function handleTaskCountChange(e) {
+    setTaskCount(e.target.value);
+  }
+
+  function taskCountDe() {
+    if(taskCount <= 0){
+      return
+    }
+    else if(taskCount >= 0){
+      setTaskCount(taskCount - 10);
+    }
+  }
+
+  function taskCountIn() {
+    setTaskCount(taskCount + 10);
+  }
+
+  function handleAddTask() {
+      setTasks([
+        ...tasks,
+        {
+          id: tasks.length + 1,
+          site: "YeezySupply",
+          input: inputValue,
+          size: "R",
+          profile: "null",
+          proxy: "local",
+          status: "Created"
+        }
+      ]);
+      setShowMssg(false)
+    }
+  
+
+    const checkTasks = () => {
+      if(tasks.length == 0){
+        setShowMssg(true)
+      }
+    }
+    useEffect(() => {
+      checkTasks();
+  }, []);
+
+  const clearAll = () => {
+    if(tasks.length >= 0){
+      setTasks([])
+      setShowMssg(true)
+    }
+  } 
+
+  const removeSelected = (a) => {
+    setTasks(tasks.filter((item) => item !== a)); 
+    if(tasks.length == 1){
+      setShowMssg(true)
+    }
+  }
+
+
+  const toggleHandler = () => {
     setOpen(!open);
     if(icon == Plus){
         setIcon(Close)
@@ -53,7 +138,7 @@ export default function Manage() {
 
 
 
-  const toggleHandler2 = (yur) => {
+  const toggleHandler2 = () => {
     setOpen2(!open2);
     if(icon2 == Plus){
       setIcon2(Close)
@@ -69,57 +154,6 @@ export default function Manage() {
     config: { duration: "200" }
   });
 
-
-  useEffect(() => {
-    localStorage.setItem(groupName, JSON.stringify(tasks));
-  }, [tasks]);
-
-  function handleIInputChange(e) {
-    setInputValue(e.target.value);
-  }
-
-  function handleAddTask() {
-      setTasks([
-        ...tasks,
-        {
-          id: tasks.length + 1,
-          site: "YeezySupply",
-          input: inputValue,
-          size: "R",
-          profile: "null",
-          proxy: "local",
-          status: "Created"
-        }
-      ]);
-      setShowMssg(false)
-  }
-
-  const showMoreFunc = () => {
-      setShowMore(!showMore)
-    }
-
-    const checkTasks = () => {
-      if(tasks.length == 0){
-        setShowMssg(true)
-      }
-    }
-    useEffect(() => {
-      checkTasks();
-  }, []);
-
-
-  const toggleModal = () => {
-    setCreateModal(!createModal)
-    checkTasks()
-  }
-
-  const clearAll = () => {
-    if(tasks.length >= 0){
-      setTasks([])
-      setShowMssg(true)
-    }
-  } 
-
   return (
     <div className='ml-20'>
       <Toaster position="bottom-right" gutter={12}  toastOptions={{
@@ -133,7 +167,7 @@ export default function Manage() {
                <img className='w-[60%] ml-8 mt-3 opacity-50' src = {Item}></img>
             </div>
     <div>
-                  <p className='text-[27px] font-semibold pt-5 ml-2 mt-[40px]' id="title">{groupName}</p>
+                  <p className='text-[27px] font-semibold pt-5 ml-2 mt-[40px]'>{groupName}</p>
                   <p className='text-gray-500 ml-2 mt-1.5 text-sm'>{tasks.length} total tasks</p>
     </div>
      
@@ -154,7 +188,7 @@ export default function Manage() {
         }}  TransitionComponent={Zoom} placement="top">        
               <div>
               <button className="text-[#fff] bg-[#181E25]  font-medium rounded-lg px-2.5 py-[9px] text-center inline-flex items-center m-2 mr-4">
-              <span className='text-xl'><MdViewStream/></span>
+              <span className='text-xl' onClick={toggleClassic}><MdViewStream/></span>
               </button>
               </div>
               </Tooltip>
@@ -173,7 +207,7 @@ export default function Manage() {
               <div>
                 
               <button className="text-[#fff] bg-[#181E25]  font-medium rounded-lg px-2.5 py-[9px] text-center inline-flex items-center m-2 ml-4 mr-2">
-              <span className='text-xl'><HiViewGrid/></span>
+              <span className='text-xl' onClick={toggleGrid}><HiViewGrid/></span>
               </button>
               </div>
               </Tooltip>
@@ -190,7 +224,8 @@ export default function Manage() {
             <div className='flex'>
               <div>
               <button className="text-[#fff] bg-[#0E61FF]  font-medium rounded-lg px-5 py-[7px] text-center inline-flex items-center m-2 mr-0" onClick={toggleModal}>
-              Create Tasks
+                <span className='text-xl mr-1'><FiPlus/></span>
+              Create
               </button>
               </div>
               <div>
@@ -213,6 +248,8 @@ export default function Manage() {
 
           </div>
       </div>
+
+      {classic && (
       <div className='mt-6'>
 
 <div class="overflow-auto relative h-[80vh] w-full">
@@ -264,8 +301,9 @@ export default function Manage() {
                 {tasks.status}
                 </td>
                 <td class="py-4 px-6">
-                  <button className='ml-1 text-[#00D37F]'><FaPlay/></button>
-                  <button className='ml-4 text-gray-500'><MdModeEditOutline/></button>
+                  <button className='ml-2 text-[#00D37F]'><FaPlay/></button>
+                  <button className='ml-2 text-gray-500'><MdModeEditOutline/></button>
+                  <button onClick={() => removeSelected(tasks)}><img className='w-[15px] ml-2' src = {Edit}></img></button>
 
                 </td>
             </tr>
@@ -278,18 +316,106 @@ export default function Manage() {
                       : 'flex justify-center'
                   }>
                     <div>
-                      <p className='text-center -ml-16 text-lg font-medium text-gray-500 mt-[20vh]'>You have no tasks</p>
+                    <div className='flex justify-center -ml-[2.80rem] mt-[18vh]'>
+  <div>
+  <div className='flex'>
+    <div className='w-2/4'>
+    <div className='w-32  h-2 bg-gray-700 rounded-lg'></div>
+    </div>
+    <div className='flex justify-end w-1/3'>
+      <div className='w-12 ml-6 h-2 bg-gray-800 rounded-lg'></div>
+    </div>
+  </div>
+  <div className='flex mt-4'>
+    <div className='w-1/4'>
+    <div className='w-24  h-2 bg-gray-500 rounded-lg'></div>
+    </div>
+    <div className='flex justify-end w-2/3'>
+      <div className='w-24 ml-8 h-2 bg-gray-700 rounded-lg'></div>
+    </div>
+  </div>
+  <div className='flex mt-4'>
+    <div className='w-1/4'>
+    <div className='w-12  h-2 bg-gray-700 rounded-lg'></div>
+    </div>
+    <div className='flex justify-end w-2/3'>
+      <div className='w-32 ml-8 h-2 bg-gray-600 rounded-lg'></div>
+    </div>
+  </div>
+  </div>
+</div>
+                      <p className='text-center -ml-16 text-lg font-medium text-gray-500 mt-6'>You have no tasks</p>
                       <p className='text-center -ml-16 mt-1.5 text-sm text-gray-500'>Click 'Create Tasks' to get started with your tasks</p>
                     </div>
           </div>
+          
 </div>
-
-
-
-
-
-
       </div>
+      )}
+
+
+{grid && (
+      <div className='mt-6'>
+
+<div class="overflow-auto relative h-[80vh] w-full">
+<div className='h-[1px] w-full bg-[#1B1F25]'></div>
+    <table class="w-full flex">
+<div className='w-1/3'>
+  <p className='font-medium ml-8 mt-5 text-gray-500'>Initializing</p>
+</div>
+<div className='w-1/3'>
+<p className='font-medium mt-5 text-gray-500 ml-8'>Submitting</p>
+
+
+</div>
+<div className='w-1/3'>
+<p className='font-medium mt-5 text-gray-500 ml-8'>Finishing</p>
+
+
+</div>
+    </table>
+    <div className={
+                      !showMssg
+                      ? 'hidden'
+                      : 'flex justify-center'
+                  }>
+                                <div>
+                    <div className='flex justify-center -ml-[2.80rem] mt-[18vh]'>
+  <div>
+  <div className='flex'>
+    <div className='w-2/4'>
+    <div className='w-32  h-2 bg-gray-700 rounded-lg'></div>
+    </div>
+    <div className='flex justify-end w-1/3'>
+      <div className='w-12 ml-6 h-2 bg-gray-800 rounded-lg'></div>
+    </div>
+  </div>
+  <div className='flex mt-4'>
+    <div className='w-1/4'>
+    <div className='w-24  h-2 bg-gray-500 rounded-lg'></div>
+    </div>
+    <div className='flex justify-end w-2/3'>
+      <div className='w-24 ml-8 h-2 bg-gray-700 rounded-lg'></div>
+    </div>
+  </div>
+  <div className='flex mt-4'>
+    <div className='w-1/4'>
+    <div className='w-12  h-2 bg-gray-700 rounded-lg'></div>
+    </div>
+    <div className='flex justify-end w-2/3'>
+      <div className='w-32 ml-8 h-2 bg-gray-600 rounded-lg'></div>
+    </div>
+  </div>
+  </div>
+</div>
+                      <p className='text-center -ml-16 text-lg font-medium text-gray-500 mt-6'>You have no tasks</p>
+                      <p className='text-center -ml-16 mt-1.5 text-sm text-gray-500'>Click 'Create Tasks' to get started with your tasks</p>
+                    </div>
+          </div>
+          
+</div>
+      </div>
+      )}
 
       {createModal && (
   <div className="w-full h-full absolute top-0 left-0 right-0 bottom-0">
@@ -341,6 +467,14 @@ export default function Manage() {
               <label className='relative top-0 text-sm text-gray-500'>Input</label>
                   <input className='w-full mt-1 rounded-lg h-10 pl-3 bg-[#1B2127] border border-[#282F37]' value={inputValue} onChange={handleIInputChange} placeholder='81911164'       
                 ></input>
+                <label className='relative top-3 text-sm text-gray-500'>Task count</label>
+                <br></br>
+                <div className='flex'>
+                  <button className='mt-4 ml-1' onClick={taskCountDe}><img src = {Close}></img></button>
+                <input type="number" className="w-20 mt-5 rounded-lg h-10 pl-3 bg-transparent text-center" placeholder='100' value={taskCount} onChange={handleTaskCountChange}></input>
+                <button className='mt-4' onClick={taskCountIn}><img src = {Plus}></img></button>
+
+                </div>
             </div>
           </div>
     </animated.div>
