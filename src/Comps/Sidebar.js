@@ -49,10 +49,7 @@ function getFour(){
 
   return (
     <div className='w-20 h-[100vh] bg-[#0a0e13] absolute'>
-        <div className='pt-5 ml-[17px] flex'>
-            <div className='p-[5px] w-[5px] rounded-full bg-[#ED6A61] cursor-pointer'></div>
-            <div className='p-[5px] w-[5px] rounded-full bg-[#F3BD4F] ml-2 cursor-pointer'></div>
-            <div className='p-[5px] w-[5px] rounded-full bg-[#63C255] ml-2 cursor-pointer'></div>
+        <div className='pt-1 ml-[17px] flex'>
         </div>
         <div className='flex justify-center h-5/6'>
             <div className='mt-4'>

@@ -83,7 +83,7 @@ export default function Manage() {
         ...tasks,
         {
           id: tasks.length + 1,
-          site: "Target",
+          site: "YeezySupply",
           input: inputValue,
           size: "R",
           profile: "null",
@@ -316,7 +316,7 @@ export default function Manage() {
             <div className='mr-2 ml-2'>
             <label className='relative top-0 text-sm text-gray-500'>Site</label>
           <select className='w-full mt-1 rounded-lg h-10 pl-3 bg-[#1B2127] border border-[#282F37]' placeholder='new group' >
-            <option>Target</option>
+            <option>YeezySupply</option>
           </select>
               <label className='relative top-2 text-sm text-gray-500'>Mode</label>
               <select className='w-full mt-3 rounded-lg h-10 pl-3 bg-[#1B2127] border border-[#282F37]' placeholder='new group'       

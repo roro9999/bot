@@ -77,7 +77,7 @@ export default function Tasks() {
           </div>
         {groups.map((a, i) => (
 
-                    <div className='w-72 h-36 border border-[#1B1F25] bg-[#13181E] rounded-lg mr-5 mt-5' key={i}>
+                    <div className='w-72 h-36 border border-[#1B1F25] bg-[#13181E] rounded-lg mr-5 mt-4' key={i}>
                       <div className='flex'>
                       <Link to={"/manage"}
                           state={{groupName: a.name, tasks: ""}}
