@@ -40,6 +40,7 @@ export default function Tasks() {
       setGroupNameValue("")
       setShowMssg(false)
     }
+    
     return
   }
 
@@ -50,6 +51,7 @@ export default function Tasks() {
   }
   useEffect(() => {
     checkGroups();
+    
 }, []);
 
   return (
@@ -116,7 +118,15 @@ export default function Tasks() {
                   <input className='w-full mt-2 rounded-lg h-10 pl-3 bg-[#1B2127] border border-[#282F37]' placeholder='Target restocks'       
                     value={groupNameValue}
                     onChange={setGroupTextValue}></input>
-                  <button className='w-full mt-4 bg-[#fff] h-9 rounded-lg bg-[#F9888A] font-semibold mb-4' onClick={addNewGroup}>Create</button>
+                       <div className='flex'>
+        <div className='w-1/2'>
+        <button className='w-24 h-9 rounded-lg bg-[#0E61FF] font-semibold mb-4 mt-6' onClick={addNewGroup}>Add</button>
+          </div>
+      <div className='w-1/2 flex justify-end'>
+        <button className='w-20 h-9 rounded-lg font-semibold mb-4 mt-6' onClick={toggleModal}>Cancel</button>
+        </div>
+
+        </div>
                   </div>
             </div>
           </div>

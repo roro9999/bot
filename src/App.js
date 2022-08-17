@@ -13,6 +13,7 @@ function App() {
     <BrowserRouter>
       <div className='drag'></div>
       <Sidebar/>
+      
         <Routes>
           <Route path="/" element={<Dashboard/>} />
           <Route path="/dashboard" element={<Dashboard/>} />

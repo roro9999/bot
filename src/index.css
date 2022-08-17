@@ -58,7 +58,7 @@ button{
   animation: .2s fade;
 }
 :focus-visible {
-  outline: 2px solid #5572f4be !important;
+  outline: 2px solid #0E61FF !important;
   
 }
 
