@@ -9,10 +9,14 @@
   padding: 0px;
   user-select: none;
   outline: none;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 html {
   overflow-y: scroll;
   overflow-y: overlay;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 body {
   margin: 0px;
@@ -41,6 +45,9 @@ button{
   background: #888;
   border-radius: 10px;
 }
+:focus-visible {
+  outline: 2px solid #0e62ffaa !important;
+}
 .drag{
   -webkit-app-region: drag;
   position: absolute;
@@ -53,11 +60,6 @@ button{
 #fade{
   animation: .2s fade;
 }
-:focus-visible {
-  outline: 2px solid #0e62ff7c !important;
-  
-}
-
 @keyframes fade {
   from {
     opacity: 0%;

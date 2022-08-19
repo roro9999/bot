@@ -124,7 +124,7 @@ function getFour(){
             </div>
         </div>
           <div className='flex justify-center'>
-              <div className='bottom-10 absolute'>
+              <div className='bottom-6 absolute'>
               <Tooltip title="Settings" componentsProps={{
           tooltip: {
             sx: {

@@ -1,9 +1,9 @@
 import React, {useState, useEffect} from 'react'
 import { Link, useLocation } from "react-router-dom";
-import { FiChevronLeft, FiMoreVertical, FiX } from "react-icons/fi";
-import { FaPlay, FaStop } from "react-icons/fa";
+import { FiChevronLeft, FiX } from "react-icons/fi";
+import { FaPlay } from "react-icons/fa";
 import { HiViewGrid } from "react-icons/hi";
-import { MdViewStream, MdModeEditOutline } from "react-icons/md";
+import { MdViewStream } from "react-icons/md";
 import Tooltip from '@mui/material/Tooltip';
 import Zoom from '@mui/material/Zoom';
 import { useSpring, animated } from "react-spring";
@@ -11,24 +11,20 @@ import Plus from '../Static/plus.svg'
 import Close from '../Static/close.svg'
 import Item from '../Static/item.svg'
 import toast, { Toaster } from 'react-hot-toast';
+import Trash from '../Static/trash.svg';
 import Edit from '../Static/edit.svg'
 import { FiPlus } from "react-icons/fi";
-
 
 
 export default function Manage() {
   let location = useLocation()
   let groupName = location.state.groupName
+  let groupId = location.state.groupId
   const [showMssg, setShowMssg] = useState(false)
   const [createModal, setCreateModal] = useState(false)
-  const [tasks, setTasks] = useState(() => {
-    const savedtasks = localStorage.getItem(groupName);
-    if (savedtasks) {
-      return JSON.parse(savedtasks);
-    } else {
-      return [];
-    }
-  });
+  const [editModal, setEditModal] = useState(false)
+  const [editing, setEditing] = useState()
+  const [editInput, setEditInput] = useState()
   const [inputValue, setInputValue] = useState("");
   const [taskCount, setTaskCount] = useState(100);
   const [open, setOpen] = useState(false);
@@ -37,15 +33,37 @@ export default function Manage() {
   const [icon2, setIcon2] = useState(Plus);
   const [classic, setClassic] = useState(true);
   const [grid, setGrid] = useState(false);
-
+  const [tasks, setTasks] = useState(() => {
+    const savedtasks = localStorage.getItem(groupId);
+    if (savedtasks) {
+      return JSON.parse(savedtasks);
+    } else {
+      return [];
+    }
+  });
 
   useEffect(() => {
-    localStorage.setItem(groupName, JSON.stringify(tasks));
+    localStorage.setItem(groupId, JSON.stringify(tasks));
   }, [tasks]);
 
   const toggleModal = () => {
     setCreateModal(!createModal)
     checkTasks()
+  }
+  
+  const toggleEdit = (tasks) => {
+    setEditModal(!editModal)
+    setEditing(tasks.id)
+  }
+
+  const editSelected = () => {
+    const tasksCopy = [...tasks]
+    tasks.forEach((t) => {
+      if(t.id == editing){
+        t.input = editInput
+        setTasks(tasksCopy)
+      }
+    });
   }
 
   const toggleGrid = () => {
@@ -64,6 +82,10 @@ export default function Manage() {
 
   function handleTaskCountChange(e) {
     setTaskCount(e.target.value);
+  }
+  
+  function handleEditInput(e) {
+    setEditInput(e.target.value);
   }
 
   function taskCountDe() {
@@ -118,7 +140,6 @@ export default function Manage() {
       setShowMssg(true)
     }
   }
-
 
   const toggleHandler = () => {
     setOpen(!open);
@@ -302,8 +323,8 @@ export default function Manage() {
                 </td>
                 <td class="py-4 px-6">
                   <button className='ml-2 text-[#00D37F]'><FaPlay/></button>
-                  <button className='ml-2 text-gray-500'><MdModeEditOutline/></button>
-                  <button onClick={() => removeSelected(tasks)}><img className='w-[15px] ml-2' src = {Edit}></img></button>
+                  <button onClick={() => toggleEdit(tasks)} className='ml-2 text-gray-500'><img className='w-[15px]' src = {Edit}></img></button>
+                  <button onClick={() => removeSelected(tasks)}><img className='w-[15px] ml-2' src = {Trash}></img></button>
 
                 </td>
             </tr>
@@ -445,12 +466,13 @@ export default function Manage() {
             <option>YeezySupply</option>
           </select>
               <label className='relative top-2 text-sm text-gray-500'>Mode</label>
-              <select className='w-full mt-3 rounded-lg h-10 pl-3 bg-[#1B2127] border border-[#282F37]' placeholder='new group'       
+              <select className='w-full mt-3 rounded-lg h-10 pl-3 bg-[#1B2127] border border-[#282F37]'
               >
                  <option>Normal</option>
                  <option>Speical</option>
               </select>
             </div>
+            
           </div>
     </animated.div>
       <animated.div className="p-10 pt-6 pr-0 pb-11 overflow-hidden cursor-pointer border-b border-[#282F37]" style={openAnimation2}>
@@ -464,9 +486,31 @@ export default function Manage() {
           </div>
           <div className="-ml-10 -mt-6">
             <div className='mr-2 ml-2'>
-              <label className='relative top-0 text-sm text-gray-500'>Input</label>
+              <div className='flex mr-2'>
+                <div className='w-2/3'>
+                <label className='relative top-0 text-sm text-gray-500'>Input</label>
                   <input className='w-full mt-1 rounded-lg h-10 pl-3 bg-[#1B2127] border border-[#282F37]' value={inputValue} onChange={handleIInputChange} placeholder='81911164'       
                 ></input>
+                </div>
+                <div className='w-1/3'>
+                <label className='relative top-0 text-sm text-gray-500 ml-2'>Quanity</label>
+                  <input className='w-full mt-1 rounded-lg h-10 pl-3 bg-[#1B2127] border border-[#282F37] ml-2' value={inputValue} onChange={handleIInputChange} placeholder='1'       
+                ></input>
+                </div>
+              </div>
+             
+                 <div>
+              <label className='relative top-2 text-sm text-gray-500'>Billing</label>
+              <select className='w-full mt-3 rounded-lg h-10 pl-3 bg-[#1B2127] border border-[#282F37]'>
+                <option value="">Test Profile</option>
+              </select>
+            </div>
+            <div>
+              <label className='relative top-2 text-sm text-gray-500'>Proxy</label>
+              <select className='w-full mt-3 rounded-lg h-10 pl-3 bg-[#1B2127] border border-[#282F37]'>
+                <option value="">List 1</option>
+              </select>
+            </div>
                 <label className='relative top-3 text-sm text-gray-500'>Task count</label>
                 <br></br>
                 <div className='flex'>
@@ -475,6 +519,7 @@ export default function Manage() {
                 <button className='mt-4' onClick={taskCountIn}><img src = {Plus}></img></button>
 
                 </div>
+                
             </div>
           </div>
     </animated.div>
@@ -484,6 +529,72 @@ export default function Manage() {
           </div>
       <div className='w-1/2 flex justify-end'>
         <button className='w-20 h-9 rounded-lg font-semibold mb-4 mt-6' onClick={toggleModal}>Cancel</button>
+        </div>
+        </div>
+
+          </div>
+    </div>
+  </div>
+</div>
+      )}
+
+{editModal && (
+  <div className="w-full h-full absolute top-0 left-0 right-0 bottom-0">
+  <div className="bg-[#00000070] w-full h-full fixed top-0 left-0 right-0 bottom-0 z-10 "></div>
+  <div className="flex justify-center">
+    <div className='w-[35vw] bg-[#13181E] border border-[#1B1F25] z-30 rounded-lg mt-32' id="fade">
+      <div className='flex'>
+        <div className='w-full'>
+          <p className='text-xl font-semibold ml-4 mt-3'>Edit task</p>
+          <p className='text-gray-500 ml-4 mt-1 text-sm'>Editing id {editing}</p>
+          </div>
+        </div>
+        <div className='ml-4 mr-4'>
+        <animated.div className="p-10 pt-6 pr-0 pb-11 overflow-hidden cursor-pointer border-b border-[#282F37]" style={openAnimation}>
+          <div onClick={toggleHandler} className="flex">
+            <div className="w-3/4">
+            <p className="pb-10 font-medium -ml-10 mt-[4px]">Editable Values</p>
+            </div>
+            <div className="w-1/4 flex justify-end">
+                <button><img className="w-8 -mt-8" src = {icon}></img></button>
+            </div>
+          </div>
+          <div className="-ml-10 -mt-6">
+            <div className='mr-2 ml-2'>
+              <label className='relative top-2 text-sm text-gray-500'>Mode</label>
+              <select className='w-full mt-3 rounded-lg h-10 pl-3 bg-[#1B2127] border border-[#282F37]' placeholder='new group'       
+              >
+                 <option>Normal</option>
+                 <option>Speical</option>
+              </select>
+              <div className='flex mr-2 mt-2'>
+                <div className='w-2/3'>
+                <label className='relative top-0 text-sm text-gray-500'>Input</label>
+                  <input className='w-full mt-1 rounded-lg h-10 pl-3 bg-[#1B2127] border border-[#282F37]' value={editInput} onChange={handleEditInput} placeholder='81911164'       
+                ></input>
+                </div>
+                <div className='w-1/3'>
+                <label className='relative top-0 text-sm text-gray-500 ml-2'>Quanity</label>
+                  <input className='w-full mt-1 rounded-lg h-10 pl-3 bg-[#1B2127] border border-[#282F37] ml-2' value={inputValue} onChange={handleIInputChange} placeholder='1'       
+                ></input>
+                </div>
+              </div>
+            <div>
+              <label className='relative top-2 text-sm text-gray-500'>Proxy</label>
+              <select className='w-full mt-3 rounded-lg h-10 pl-3 bg-[#1B2127] border border-[#282F37]'>
+                <option value="">List 1</option>
+              </select>
+            </div>
+            </div>
+            
+          </div>
+    </animated.div>
+      <div className='flex'>
+        <div className='w-1/2'>
+        <button className='w-24 h-9 rounded-lg bg-[#0E61FF] font-semibold mb-4 mt-6' onClick={editSelected}>Add</button>
+          </div>
+      <div className='w-1/2 flex justify-end'>
+        <button className='w-20 h-9 rounded-lg font-semibold mb-4 mt-6' onClick={toggleEdit}>Cancel</button>
         </div>
 
         </div>

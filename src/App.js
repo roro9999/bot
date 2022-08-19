@@ -1,6 +1,6 @@
 import './index.css';
 import Sidebar from './Comps/Sidebar';
-import { BrowserRouter, Switch, Route, Link, useNavigate, useHistory, Routes } from "react-router-dom";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Dashboard from './Dashboard/Dashboard'
 import Tasks from './Tasks/Tasks'
 import Billing from './Billing/Billing'
@@ -13,7 +13,6 @@ function App() {
     <BrowserRouter>
       <div className='drag'></div>
       <Sidebar/>
-      
         <Routes>
           <Route path="/" element={<Dashboard/>} />
           <Route path="/dashboard" element={<Dashboard/>} />
