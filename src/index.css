@@ -51,11 +51,23 @@ button{
 .drag{
   -webkit-app-region: drag;
   position: absolute;
-  width: 50%;
+  width: 40%;
   height: 70px;
   z-index: -10;
   background-color: transparent;
   margin-left: 35%;
+}
+.upload-styles {
+  position: relative;
+  overflow: hidden;
+  display: inline-block;
+}
+.upload-styles input[type=file] {
+  font-size: 100px;
+  position: absolute;
+  left: 0;
+  top: 0;
+  opacity: 0;
 }
 #fade{
   animation: .2s fade;

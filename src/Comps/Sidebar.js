@@ -148,10 +148,10 @@ function getFour(){
             <div className='w-[40vw] bg-[#13181E] border border-[#1B1F25] z-30 rounded-lg mt-48' id="fade">
               <div className='flex'>
                 <div className='w-full'>
-                  <p className='text-xl font-semibold ml-3 mt-3'>Settings</p>
+                  <p className='text-xl font-semibold ml-4 mt-3'>Settings</p>
                   </div>
                 </div>
-                <div className='ml-3 mr-3'>
+                <div className='ml-4 mr-4'>
                     <label className='relative top-1 text-sm text-[#525861]'>Discord webhook</label>
                   <input className='w-full mt-2  rounded-lg h-10 pl-3 bg-[#1B2127] border border-[#282F37]' placeholder='https://discord.gg'></input>
                   <div className='flex mt-3'>
@@ -159,7 +159,7 @@ function getFour(){
                     <label className='relative text-sm text-[#525861]'>Retry delay</label>
                   <input className='w-full mt-1  rounded-lg h-10 pl-3 bg-[#1B2127] border border-[#282F37]' placeholder='1000'></input>
                         </div>
-                        <div className='w-1/2 ml-3'> 
+                        <div className='w-1/2 ml-4'> 
                         <label className='relative text-sm text-[#525861]'>Monitor delay</label>
                   <input className='w-full mt-1  rounded-lg h-10 pl-3 bg-[#1B2127] border border-[#282F37]' placeholder='1000'></input>
                             </div>

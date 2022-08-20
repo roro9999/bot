@@ -5,6 +5,8 @@ import Edit from '../Static/edit.svg'
 import { FiX } from "react-icons/fi";
 import { FiPlus } from "react-icons/fi";
 import Random from 'random-number'
+import Import from '../Static/import.svg'
+import Export from '../Static/export.svg'
 
 export default function Tasks() {
   const [addgroup, setAddGroup] = useState(false)
@@ -49,7 +51,7 @@ export default function Tasks() {
 
   const removeSelected = (a) => {
     setGroups(groups.filter((item) => item !== a)); 
-    localStorage.removeItem(a.name);
+    localStorage.removeItem(a.id);
     if(groups.length == 1){
       setShowMssg(true)
     }
@@ -63,6 +65,22 @@ export default function Tasks() {
         setGroups(copyGroups)
       }
     });
+  }
+
+  const importGroups = (e) => {
+    window.location.reload()
+    const fileReader = new FileReader();
+    fileReader.readAsText(e.target.files[0], "UTF-8");
+    fileReader.onload = e => {
+      console.log(e.target.result);
+      let imported = e.target.result
+      setGroups([...groups, JSON.parse(imported)])
+      setShowMssg(false)
+    };
+  }
+
+  const exportGroups = () => {
+   // need to add
   }
 
 
@@ -82,7 +100,6 @@ export default function Tasks() {
   }
   useEffect(() => {
     checkGroups();
-    
 }, []);
 
   return (
@@ -91,11 +108,16 @@ export default function Tasks() {
         <div className='w-1/2'>
           <p className='text-2xl font-semibold pt-6 ml-8'>Groups</p>
         </div>
-        <div className='w-1/2 flex justify-end mr-10'>
-        <button className="text-[#fff] bg-[#0E61FF]  font-medium rounded-lg px-5 py-[7px] text-center inline-flex items-center mt-6" onClick={toggleModal}>
-                <span className='text-xl mr-1'><FiPlus/></span>
-              Create
-              </button>        </div>
+        <div className='w-1/2 flex justify-end mr-10 items-center'>
+          
+        <div className="upload-styles">
+          <button className="text-[#fff] bg-[#181E25] font-medium rounded-lg px-2.5 py-[7px] text-center inline-flex items-center mt-6 mr-2"><img className='w-5' src = {Import}></img></button>        
+          <input type="file" name="myfile" onChange={importGroups} />
+        </div>
+
+          <button className="text-[#fff] bg-[#181E25] font-medium rounded-lg px-2.5 py-[7px] text-center inline-flex items-center mt-6 mr-4" onClick={toggleModal}><img className='w-5' src = {Export}></img></button>        
+          <button className="text-[#fff] bg-[#0E61FF] font-medium rounded-lg px-5 py-[7px] text-center inline-flex items-center mt-6" onClick={toggleModal}><span className='text-xl mr-1'><FiPlus/></span>Create</button>        
+        </div>
       </div>
         <div className='flex flex-wrap overflow-auto fixed cursor-pointer ml-8 mt-0'>
         <div className={
@@ -148,7 +170,7 @@ export default function Tasks() {
                       ><div className='w-[15rem]'>
                 
                         <p className='text-sm text-gray-500 m-4 mb-0 mt-3'>Name</p>
-                      <p className='ml-4 font-semibold text-lg mt-1'>{a.name}</p>
+                      <p className='ml-4 font-semibold text-lg mt-1 w-48 truncate'>{a.name}</p>
                         </div>
                         </Link>
                         <div className='w-1/4 flex justify-end mr-4 mt-[1.1rem]'>
@@ -161,11 +183,10 @@ export default function Tasks() {
                   </div>                
                   
           ))}
-   
- 
-      
+
            </div>
-        {addgroup && (
+
+  {addgroup && (
         <div className="w-full h-full absolute top-0 left-0 right-0 bottom-0">
           <div className="bg-[#00000070] w-full h-full fixed top-0 left-0 right-0 bottom-0 z-10 "></div>
           <div className="flex justify-center">

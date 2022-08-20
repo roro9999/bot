@@ -17,14 +17,14 @@ import { FiPlus } from "react-icons/fi";
 
 
 export default function Manage() {
-  let location = useLocation()
-  let groupName = location.state.groupName
-  let groupId = location.state.groupId
-  const [showMssg, setShowMssg] = useState(false)
-  const [createModal, setCreateModal] = useState(false)
-  const [editModal, setEditModal] = useState(false)
-  const [editing, setEditing] = useState()
-  const [editInput, setEditInput] = useState()
+  let location = useLocation();
+  const groupName = location.state.groupName;
+  const groupId = location.state.groupId;
+  const [showMssg, setShowMssg] = useState(false);
+  const [createModal, setCreateModal] = useState(false);
+  const [editModal, setEditModal] = useState(false);
+  const [editing, setEditing] = useState();
+  const [editInput, setEditInput] = useState();
   const [inputValue, setInputValue] = useState("");
   const [taskCount, setTaskCount] = useState(100);
   const [open, setOpen] = useState(false);
@@ -61,7 +61,9 @@ export default function Manage() {
     tasks.forEach((t) => {
       if(t.id == editing){
         t.input = editInput
-        setTasks(tasksCopy)
+        if(editInput != ""){
+          setTasks(tasksCopy)
+        }
       }
     });
   }
@@ -178,21 +180,20 @@ export default function Manage() {
   return (
     <div className='ml-20'>
       <Toaster position="bottom-right" gutter={12}  toastOptions={{
-    className: '',
-    duration: 3000,
-  }}/>
+        className: '',
+        duration: 3000,
+      }}/>
       <div className='flex'>
           <div className='w-1/4 flex'>
             <div>
               <Link to={'/tasks'}><button className='ml-6 flex font-medium pt-6 cursor-pointer'><span className='text-2xl text-[#0E61FF]'><FiChevronLeft/></span>Groups</button></Link>
                <img className='w-[60%] ml-8 mt-3 opacity-50' src = {Item}></img>
             </div>
-    <div>
-                  <p className='text-[27px] font-semibold pt-5 ml-2 mt-[40px]'>{groupName}</p>
-                  <p className='text-gray-500 ml-2 mt-1.5 text-sm'>{tasks.length} total tasks</p>
-    </div>
-     
-          </div>
+        <div>
+            <p className='text-[27px] font-semibold pt-5 ml-2 mt-[40px] w-48 truncate'>{groupName}</p>
+            <p className='text-gray-500 ml-2 text-sm'>{tasks.length} total tasks</p>
+        </div>
+      </div>
           <div className='w-1/4 flex justify-end mr-8 mt-14'>
             <div>
               <p className='ml-2 text-sm text-gray-500'>Views</p>
@@ -226,7 +227,6 @@ export default function Manage() {
           },
         }}  TransitionComponent={Zoom} placement="top">        
               <div>
-                
               <button className="text-[#fff] bg-[#181E25]  font-medium rounded-lg px-2.5 py-[9px] text-center inline-flex items-center m-2 ml-4 mr-2">
               <span className='text-xl' onClick={toggleGrid}><HiViewGrid/></span>
               </button>
@@ -235,93 +235,64 @@ export default function Manage() {
            
       </div>
             </div>
-
-
           </div>
         
-          <div className='w-2/4 flex justify-end mr-8 mt-14'>
-            <div>
-              <p className='ml-2 text-sm text-gray-500'>Actions</p>
-            <div className='flex'>
-              <div>
-              <button className="text-[#fff] bg-[#0E61FF]  font-medium rounded-lg px-5 py-[7px] text-center inline-flex items-center m-2 mr-0" onClick={toggleModal}>
-                <span className='text-xl mr-1'><FiPlus/></span>
-              Create
-              </button>
+        <div className='w-2/4 flex justify-end mr-8 mt-14'>
+          <div>
+            <p className='ml-2 text-sm text-gray-500'>Actions</p>
+          <div className='flex'>
+              <div className='flex items-center'>
+                <button className="text-[#fff] bg-[#0E61FF]  font-medium rounded-lg px-5 py-[7px] text-center inline-flex items-center m-2 mr-0" onClick={toggleModal}><span className='text-xl mr-1'><FiPlus/></span>Create</button>
+                <button className="text-[#fff] bg-[#00D37F]  font-medium rounded-lg px-5 py-[7px] text-center inline-flex items-center m-2 mr-0">Start All</button>
+                <button className="text-[#fff] bg-[#F54364] font-medium rounded-lg  px-5 py-[7px] text-center inline-flex items-center m-2">Stop All</button>
+                <button className="text-[#fff] bg-[#181E25] font-medium rounded-lg  px-5 py-[7px] text-center inline-flex items-center m-2 ml-0 mr-0" onClick={clearAll}>Clear All</button>            
               </div>
-              <div>
-              <button className="text-[#fff] bg-[#00D37F]  font-medium rounded-lg px-5 py-[7px] text-center inline-flex items-center m-2 mr-0">
-              Start All
-              </button>
-              </div>
-              <div>
-              <button className="text-[#fff] bg-[#F54364] font-medium rounded-lg  px-5 py-[7px] text-center inline-flex items-center m-2">
-              Stop All
-              </button>
-              <button className="text-[#fff] bg-[#181E25] font-medium rounded-lg  px-5 py-[7px] text-center inline-flex items-center m-2 ml-0 mr-0" onClick={clearAll}>
-              Clear All
-              </button>            
-              </div>
-    
-</div>
             </div>
-
-
           </div>
+        </div>
+
+
       </div>
 
       {classic && (
       <div className='mt-6'>
 
-<div class="overflow-auto relative h-[80vh] w-full">
-    <table class="w-full text-sm text-left text-gray-500">
-        <thead class="text-xs text-gray-500 uppercase bg-[#0a0e13] sticky top-0">
+<div className="overflow-auto relative h-[80vh] w-full">
+    <table className="w-full text-sm text-left text-gray-500">
+        <thead className="text-xs text-gray-500 uppercase bg-[#0a0e13] sticky top-0">
             <tr>
-                <th scope="col" class="py-4 px-6">
-                    ID
-                </th>
-                <th scope="col" class="py-4 px-6">
-                    Site
-                </th>
-                <th scope="col" class="py-4 px-6">
-                    Product
-                </th>
-                <th scope="col" class="py-4 px-6">
-                    Size
-                </th>
-                <th scope="col" class="py-4 px-6">
-                    Proxy
-                </th>
-                <th scope="col" class="py-4 px-6">
-                    Status
-                </th>
-                <th scope="col" class="py-4 px-6">
-                    Action
-                </th>
+                <th scope="col" className="py-4 px-6">ID</th>
+                <th scope="col" className="py-4 px-6">Site</th>
+                <th scope="col" className="py-4 px-6">Product</th>
+                <th scope="col" className="py-4 px-6">Size</th>
+                <th scope="col" className="py-4 px-6">Proxy</th>
+                <th scope="col" className="py-4 px-6">Status</th>
+                <th scope="col" className="py-4 px-6">Action</th>
             </tr>
         </thead>
+
         {tasks.map((tasks) => (
             <tbody>
-            <tr class="border-b border-[#1B1F25] bg-[#13181E] hover:bg-[#0a0e13] cursor-pointer ease-out duration-200">
-                <th scope="row" class="py-4 px-6 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+            <tr className="border-b border-[#1B1F25] bg-[#13181E] hover:bg-[#0a0e13] cursor-pointer ease-out duration-200">
+                <th scope="row" className="py-4 px-6 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                 {tasks.id}
                 </th>
-                <td class="py-4 px-6">
+                <td className="py-4 px-6">
                 {tasks.site}
                 </td>
-                <td class="py-4 px-6">
+                <td className="py-4 px-6">
                 {tasks.input}
                 </td>
-                <td class="py-4 px-6">
+                <td className="py-4 px-6">
                 {tasks.size}
                 </td>
-                <td class="py-4 px-6">
+                <td className="py-4 px-6">
                 {tasks.proxy}
                 </td>
-                <td class="py-4 px-6">
+                <td className="py-4 px-6">
                 {tasks.status}
                 </td>
-                <td class="py-4 px-6">
+                <td className="py-4 px-6">
                   <button className='ml-2 text-[#00D37F]'><FaPlay/></button>
                   <button onClick={() => toggleEdit(tasks)} className='ml-2 text-gray-500'><img className='w-[15px]' src = {Edit}></img></button>
                   <button onClick={() => removeSelected(tasks)}><img className='w-[15px] ml-2' src = {Trash}></img></button>
@@ -330,7 +301,9 @@ export default function Manage() {
             </tr>
         </tbody>
         ))}
+
     </table>
+
     <div className={
                       !showMssg
                       ? 'hidden'
@@ -378,9 +351,9 @@ export default function Manage() {
 {grid && (
       <div className='mt-6'>
 
-<div class="overflow-auto relative h-[80vh] w-full">
+<div className="overflow-auto relative h-[80vh] w-full">
 <div className='h-[1px] w-full bg-[#1B1F25]'></div>
-    <table class="w-full flex">
+    <table className="w-full flex">
 <div className='w-1/3'>
   <p className='font-medium ml-8 mt-5 text-gray-500'>Initializing</p>
 </div>
@@ -442,11 +415,11 @@ export default function Manage() {
   <div className="w-full h-full absolute top-0 left-0 right-0 bottom-0">
   <div className="bg-[#00000070] w-full h-full fixed top-0 left-0 right-0 bottom-0 z-10 "></div>
   <div className="flex justify-center">
-    <div className='w-[35vw] bg-[#13181E] border border-[#1B1F25] z-30 rounded-lg mt-32' id="fade">
+    <div className='w-[35vw] max-h-[36rem] overflow-auto bg-[#13181E] border border-[#1B1F25] z-30 rounded-lg mt-32' id="fade">
       <div className='flex'>
         <div className='w-full'>
           <p className='text-xl font-semibold ml-4 mt-3'>Create Tasks</p>
-          <p className='text-gray-500 ml-4 mt-1 text-sm'>In group {groupName}</p>
+          <p className='text-gray-500 ml-4 mt-1 text-sm w-48 truncate'>In group {groupName}</p>
           </div>
         </div>
         <div className='ml-4 mr-4'>
@@ -511,18 +484,21 @@ export default function Manage() {
                 <option value="">List 1</option>
               </select>
             </div>
-                <label className='relative top-3 text-sm text-gray-500'>Task count</label>
-                <br></br>
-                <div className='flex'>
-                  <button className='mt-4 ml-1' onClick={taskCountDe}><img src = {Close}></img></button>
-                <input type="number" className="w-20 mt-5 rounded-lg h-10 pl-3 bg-transparent text-center" placeholder='100' value={taskCount} onChange={handleTaskCountChange}></input>
-                <button className='mt-4' onClick={taskCountIn}><img src = {Plus}></img></button>
-
+            <div className='mt-2'>
+                <label className='relative top-0 text-sm text-gray-500'>Size</label>
+                  <input className='w-full mt-1 rounded-lg h-10 pl-3 bg-[#1B2127] border border-[#282F37]' placeholder='6, 6.5, 7, 7.5, 8'       
+                ></input>
                 </div>
-                
             </div>
           </div>
     </animated.div>
+          <label className='relative top-3 text-sm text-gray-500'>Task count</label>
+          <br></br>
+      <div className='flex'>
+          <button className='mt-4 ml-1' onClick={taskCountDe}><img src = {Close}></img></button>
+          <input type="number" className="w-20 mt-5 rounded-lg h-10 pl-3 bg-transparent text-center" placeholder='100' value={taskCount} onChange={handleTaskCountChange}></input>
+          <button className='mt-4' onClick={taskCountIn}><img src = {Plus}></img></button>
+      </div>
       <div className='flex'>
         <div className='w-1/2'>
         <button className='w-24 h-9 rounded-lg bg-[#0E61FF] font-semibold mb-4 mt-6' onClick={handleAddTask}>Add</button>
@@ -575,7 +551,7 @@ export default function Manage() {
                 </div>
                 <div className='w-1/3'>
                 <label className='relative top-0 text-sm text-gray-500 ml-2'>Quanity</label>
-                  <input className='w-full mt-1 rounded-lg h-10 pl-3 bg-[#1B2127] border border-[#282F37] ml-2' value={inputValue} onChange={handleIInputChange} placeholder='1'       
+                  <input className='w-full mt-1 rounded-lg h-10 pl-3 bg-[#1B2127] border border-[#282F37] ml-2' placeholder='1'       
                 ></input>
                 </div>
               </div>
@@ -586,7 +562,6 @@ export default function Manage() {
               </select>
             </div>
             </div>
-            
           </div>
     </animated.div>
       <div className='flex'>
@@ -596,14 +571,13 @@ export default function Manage() {
       <div className='w-1/2 flex justify-end'>
         <button className='w-20 h-9 rounded-lg font-semibold mb-4 mt-6' onClick={toggleEdit}>Cancel</button>
         </div>
-
         </div>
-
           </div>
     </div>
   </div>
 </div>
       )}
+
     </div>
   )
 }
