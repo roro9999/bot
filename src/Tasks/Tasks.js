@@ -7,6 +7,7 @@ import { FiPlus } from "react-icons/fi";
 import Random from 'random-number'
 import Import from '../Static/import.svg'
 import Export from '../Static/export.svg'
+import GroupImg from '../Static/groups.png'
 
 export default function Tasks() {
   const [addgroup, setAddGroup] = useState(false)
@@ -52,7 +53,7 @@ export default function Tasks() {
   const removeSelected = (a) => {
     setGroups(groups.filter((item) => item !== a)); 
     localStorage.removeItem(a.id);
-    if(groups.length == 1){
+    if(groups.length === 1){
       setShowMssg(true)
     }
   }
@@ -60,7 +61,7 @@ export default function Tasks() {
   const editSelected = () => {
     const copyGroups = [...groups]
     groups.forEach((g) => {
-      if(g.id == editing){
+      if(g.id === editing){
         g.name = groupNameEditValue
         setGroups(copyGroups)
       }
@@ -74,18 +75,25 @@ export default function Tasks() {
     fileReader.onload = e => {
       console.log(e.target.result);
       let imported = e.target.result
-      setGroups([...groups, JSON.parse(imported)])
+      setGroups(...groups, JSON.parse(imported))
       setShowMssg(false)
     };
   }
 
-  const exportGroups = () => {
-   // need to add
+  const exportGroups = async (blob) => {
+    const a = document.createElement('a');
+    a.download = 'groups.json';
+    a.href = URL.createObjectURL(blob);
+    a.addEventListener('click', (e) => {
+      setTimeout(() => URL.revokeObjectURL(a.href), 30 * 1000);
+    });
+    a.click();  
   }
-
+      const exported = new Blob([JSON.stringify(groups, null, 2)], {type : 'application/json'});
+  
 
   const addNewGroup = () => {
-    if(groupNameValue != ""){
+    if(groupNameValue !== ""){
       setGroups([...groups, {id: Random(options), name: groupNameValue}])
       setGroupNameValue("")
       setShowMssg(false)
@@ -94,7 +102,7 @@ export default function Tasks() {
   }
 
   const checkGroups = () => {
-    if(groups.length == 0){
+    if(groups.length === 0){
       setShowMssg(true)
     }
   }
@@ -109,56 +117,27 @@ export default function Tasks() {
           <p className='text-2xl font-semibold pt-6 ml-8'>Groups</p>
         </div>
         <div className='w-1/2 flex justify-end mr-10 items-center'>
-          
         <div className="upload-styles">
           <button className="text-[#fff] bg-[#181E25] font-medium rounded-lg px-2.5 py-[7px] text-center inline-flex items-center mt-6 mr-2"><img className='w-5' src = {Import}></img></button>        
           <input type="file" name="myfile" onChange={importGroups} />
         </div>
-
-          <button className="text-[#fff] bg-[#181E25] font-medium rounded-lg px-2.5 py-[7px] text-center inline-flex items-center mt-6 mr-4" onClick={toggleModal}><img className='w-5' src = {Export}></img></button>        
+          <button className="text-[#fff] bg-[#181E25] font-medium rounded-lg px-2.5 py-[7px] text-center inline-flex items-center mt-6 mr-4" onClick={() => exportGroups(exported)}><img className='w-5' src = {Export}></img></button>        
           <button className="text-[#fff] bg-[#0E61FF] font-medium rounded-lg px-5 py-[7px] text-center inline-flex items-center mt-6" onClick={toggleModal}><span className='text-xl mr-1'><FiPlus/></span>Create</button>        
         </div>
       </div>
         <div className='flex flex-wrap overflow-auto fixed cursor-pointer ml-8 mt-0'>
         <div className={
-                      !showMssg
-                      ? 'hidden'
-                      : 'flex justify-center w-[100vw]'
-                  }>
-                    <div>
+              !showMssg
+              ? 'hidden'
+              : 'flex justify-center w-[100vw] -ml-28 mt-[24vh]'
+          }>
+          <div>
+            <div className='flex justify-center'>
+              <img className='w-32' src = {GroupImg}></img>
 
-<div className='flex justify-center -ml-[10.80rem] mt-[29vh]'>
-  <div>
-  <div className='flex'>
-    <div className='w-2/4'>
-    <div className='w-32  h-2 bg-gray-700 rounded-lg'></div>
-    </div>
-    <div className='flex justify-end w-1/3'>
-      <div className='w-12 ml-6 h-2 bg-gray-800 rounded-lg'></div>
-    </div>
-  </div>
-  <div className='flex mt-4'>
-    <div className='w-1/4'>
-    <div className='w-24  h-2 bg-gray-500 rounded-lg'></div>
-    </div>
-    <div className='flex justify-end w-2/3'>
-      <div className='w-24 ml-8 h-2 bg-gray-700 rounded-lg'></div>
-    </div>
-  </div>
-  <div className='flex mt-4'>
-    <div className='w-1/4'>
-    <div className='w-12  h-2 bg-gray-700 rounded-lg'></div>
-    </div>
-    <div className='flex justify-end w-2/3'>
-      <div className='w-32 ml-8 h-2 bg-gray-600 rounded-lg'></div>
-    </div>
-  </div>
-  </div>
-</div>
-  
-
-                      <p className='text-center -ml-48 text-lg font-medium text-gray-500 mt-6'>You have no groups</p>
-                      <p className='text-center -ml-48 mt-1.5 text-sm text-gray-500'>Click the plus to get started with groups</p>
+            </div>
+                      <p className='text-center text-lg font-medium text-gray-500 mt-6'>You have no groups</p>
+                      <p className='text-center mt-1.5 text-sm text-gray-500'>Click 'Create' to get started with groups</p>
                     </div>
           </div>
         {groups.map((a, i) => (
@@ -224,7 +203,7 @@ export default function Tasks() {
               <div className='flex'>
                 <div className='w-full'>
                   <p className='text-xl font-semibold ml-4 mt-3'>Edit Group</p>
-                  <p className='text-gray-500 ml-4 mt-1 text-sm'>Id {editing}</p>
+                  <p className='text-gray-500 ml-4 mt-1 text-sm'>ID {editing}</p>
                   </div>
                 </div>
                 <div className='ml-4 mr-4'>

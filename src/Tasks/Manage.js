@@ -14,7 +14,7 @@ import toast, { Toaster } from 'react-hot-toast';
 import Trash from '../Static/trash.svg';
 import Edit from '../Static/edit.svg'
 import { FiPlus } from "react-icons/fi";
-
+import TaskImg from '../Static/tasks.png'
 
 export default function Manage() {
   let location = useLocation();
@@ -46,6 +46,8 @@ export default function Manage() {
     localStorage.setItem(groupId, JSON.stringify(tasks));
   }, [tasks]);
 
+  let proxyLists = JSON.parse((localStorage.getItem("lists")))
+
   const toggleModal = () => {
     setCreateModal(!createModal)
     checkTasks()
@@ -59,9 +61,9 @@ export default function Manage() {
   const editSelected = () => {
     const tasksCopy = [...tasks]
     tasks.forEach((t) => {
-      if(t.id == editing){
+      if(t.id === editing){
         t.input = editInput
-        if(editInput != ""){
+        if(editInput !== ""){
           setTasks(tasksCopy)
         }
       }
@@ -121,7 +123,7 @@ export default function Manage() {
   
 
     const checkTasks = () => {
-      if(tasks.length == 0){
+      if(tasks.length === 0){
         setShowMssg(true)
       }
     }
@@ -138,17 +140,17 @@ export default function Manage() {
 
   const removeSelected = (a) => {
     setTasks(tasks.filter((item) => item !== a)); 
-    if(tasks.length == 1){
+    if(tasks.length === 1){
       setShowMssg(true)
     }
   }
 
   const toggleHandler = () => {
     setOpen(!open);
-    if(icon == Plus){
+    if(icon === Plus){
         setIcon(Close)
     }
-    else if(icon == Close){
+    else if(icon === Close){
         setIcon(Plus)
     }
   };
@@ -305,41 +307,16 @@ export default function Manage() {
     </table>
 
     <div className={
-                      !showMssg
-                      ? 'hidden'
-                      : 'flex justify-center'
-                  }>
-                    <div>
-                    <div className='flex justify-center -ml-[2.80rem] mt-[18vh]'>
-  <div>
-  <div className='flex'>
-    <div className='w-2/4'>
-    <div className='w-32  h-2 bg-gray-700 rounded-lg'></div>
-    </div>
-    <div className='flex justify-end w-1/3'>
-      <div className='w-12 ml-6 h-2 bg-gray-800 rounded-lg'></div>
-    </div>
-  </div>
-  <div className='flex mt-4'>
-    <div className='w-1/4'>
-    <div className='w-24  h-2 bg-gray-500 rounded-lg'></div>
-    </div>
-    <div className='flex justify-end w-2/3'>
-      <div className='w-24 ml-8 h-2 bg-gray-700 rounded-lg'></div>
-    </div>
-  </div>
-  <div className='flex mt-4'>
-    <div className='w-1/4'>
-    <div className='w-12  h-2 bg-gray-700 rounded-lg'></div>
-    </div>
-    <div className='flex justify-end w-2/3'>
-      <div className='w-32 ml-8 h-2 bg-gray-600 rounded-lg'></div>
-    </div>
-  </div>
-  </div>
-</div>
-                      <p className='text-center -ml-16 text-lg font-medium text-gray-500 mt-6'>You have no tasks</p>
-                      <p className='text-center -ml-16 mt-1.5 text-sm text-gray-500'>Click 'Create Tasks' to get started with your tasks</p>
+            !showMssg
+            ? 'hidden'
+            : 'flex justify-center -ml-20 mt-[17vh]'
+        }>
+        <div>
+          <div className='flex justify-center'>
+            <img className='w-32' src = {TaskImg}></img>
+          </div>
+                      <p className='text-center text-lg font-medium text-gray-500 mt-6'>You have no tasks</p>
+                      <p className='text-center mt-1.5 text-sm text-gray-500'>Click 'Create Tasks' to get started with your tasks</p>
                     </div>
           </div>
           
@@ -435,7 +412,7 @@ export default function Manage() {
           <div className="-ml-10 -mt-6">
             <div className='mr-2 ml-2'>
             <label className='relative top-0 text-sm text-gray-500'>Site</label>
-          <select className='w-full mt-1 rounded-lg h-10 pl-3 bg-[#1B2127] border border-[#282F37]' placeholder='new group' >
+          <select className='w-full mt-1 rounded-lg h-10 pl-3 bg-[#1B2127] border border-[#282F37]'>
             <option>YeezySupply</option>
           </select>
               <label className='relative top-2 text-sm text-gray-500'>Mode</label>
@@ -467,7 +444,7 @@ export default function Manage() {
                 </div>
                 <div className='w-1/3'>
                 <label className='relative top-0 text-sm text-gray-500 ml-2'>Quanity</label>
-                  <input className='w-full mt-1 rounded-lg h-10 pl-3 bg-[#1B2127] border border-[#282F37] ml-2' value={inputValue} onChange={handleIInputChange} placeholder='1'       
+                  <input className='w-full mt-1 rounded-lg h-10 pl-3 bg-[#1B2127] border border-[#282F37] ml-2' onChange={handleIInputChange} placeholder='1'       
                 ></input>
                 </div>
               </div>
@@ -481,7 +458,11 @@ export default function Manage() {
             <div>
               <label className='relative top-2 text-sm text-gray-500'>Proxy</label>
               <select className='w-full mt-3 rounded-lg h-10 pl-3 bg-[#1B2127] border border-[#282F37]'>
-                <option value="">List 1</option>
+              {proxyLists.map(lists => (
+                    <option key={lists.id} value={lists.name}>
+                    {lists.name}
+                    </option>
+              ))}
               </select>
             </div>
             <div className='mt-2'>
@@ -521,7 +502,7 @@ export default function Manage() {
     <div className='w-[35vw] bg-[#13181E] border border-[#1B1F25] z-30 rounded-lg mt-32' id="fade">
       <div className='flex'>
         <div className='w-full'>
-          <p className='text-xl font-semibold ml-4 mt-3'>Edit task</p>
+          <p className='text-xl font-semibold ml-4 mt-3'>Edit Task</p>
           <p className='text-gray-500 ml-4 mt-1 text-sm'>Editing id {editing}</p>
           </div>
         </div>
