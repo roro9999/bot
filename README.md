@@ -1,3 +1,3 @@
-Not a full electron app
+Incomplete
 
 npm start > npm run electron-dev
